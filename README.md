@@ -111,5 +111,4 @@ Manual field measurements introduce significant setup time and potential human e
 
 ---
 
-## 📂 Repository Layout
 
