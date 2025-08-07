@@ -1,11 +1,34 @@
-- `RSSI_ref`: Calibrated signal strength at 1 meter.
-- `n`: Path loss exponent (empirically tuned between 2.0–2.4).
+# 40-Yard Dash Sprint Timer
+
+This project is a fully autonomous, wireless sprint timing system designed to replicate the functionality of NFL combine timing gates with engineering precision. Built from the ground up using ESP32 microcontrollers, time-of-flight sensors, custom wireless protocols, signal filtering, and 3D-printed enclosures, this project demonstrates robust system integration, embedded software design, and applied signal processing for low-latency sports timing.
+
+---
+
+## 🚀 Overview
+
+The system consists of a **Start Module** and a **Finish Module**, each built using a VL53L1X laser time-of-flight sensor and an ESP32 module. The two ESP32s communicate over **ESP-NOW**, a low-latency, connectionless protocol ideal for peer-to-peer communication in real-time systems. The Start Module initiates timing and wirelessly triggers the Finish Module to begin detection. Once the runner crosses the Finish sensor, the system calculates and displays the elapsed time on a 16x2 I2C LCD.
+
+A **RSSI-based distance estimation subsystem** was implemented as a dynamic calibration tool to eliminate the need for manually measuring fixed sprint distances. This subsystem integrates a Kalman filter for denoising signal strength readings and achieves sub-meter resolution in outdoor line-of-sight conditions.
+
+---
+
+## 🔌 RSSI-Based Distance Estimation
+
+### Engineering Motivation
+Manual field measurements introduce significant setup time and potential human error. The goal was to integrate a system where the start and finish modules could be positioned anywhere in an open field, and the system would self-calibrate based on estimated distance.
+
+### Technical Approach
+- Implemented an RSSI-based distance model:  
+  `Distance = 10^((RSSI_ref - RSSI) / (10 * n))`  
+  where:
+  - `RSSI_ref`: Calibrated signal strength at 1 meter.
+  - `n`: Path loss exponent (empirically tuned between 2.0–2.4).
 
 - Developed filtering stack:
-- **Outlier rejection**: Rejects implausible RSSI swings >50% of prior estimate.
-- **Moving Average Filter**: Stabilizes short-term readings.
-- **Exponential Moving Average (EMA)**: Prioritizes recent data.
-- **Kalman Filter**: Implements a probabilistic model to smooth RSSI inputs with adaptive noise covariances.
+  - **Outlier rejection**: Rejects implausible RSSI swings >50% of prior estimate.
+  - **Moving Average Filter**: Stabilizes short-term readings.
+  - **Exponential Moving Average (EMA)**: Prioritizes recent data.
+  - **Kalman Filter**: Implements a probabilistic model to smooth RSSI inputs with adaptive noise covariances.
 
 ### Results
 - Achieved **<0.75 meter RMSE** in outdoor tests.
@@ -32,21 +55,21 @@
 ### Display System
 - Interface: **I2C** 16x2 LCD, address 0x27.
 - Displays:
-- "Ready..."
-- "Timing..."
-- "Time: X.XX sec"
+  - "Ready..."
+  - "Timing..."
+  - "Time: X.XX sec"
 - LCD mount designed to sit flush in case window for visibility under direct light.
 
 ### Mechanical Design
 - Designed and fabricated **custom 3D-printed enclosures** with:
-- Sensor ports aligned for unobstructed field of view.
-- LED recesses and LCD mounts.
-- Cable strain relief and sealed reset button access.
+  - Sensor ports aligned for unobstructed field of view.
+  - LED recesses and LCD mounts.
+  - Cable strain relief and sealed reset button access.
 
 ### Reset Mechanism
 - Integrated momentary pushbuttons wired to `EN` and `D13` for manual resets.
 - Reset signal logic:
-- Normally high (idle), momentary ground pull to reset ESP.
+  - Normally high (idle), momentary ground pull to reset ESP.
 
 ---
 
