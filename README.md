@@ -77,11 +77,11 @@ Manual field measurements introduce significant setup time and potential human e
 
 ### 🏁 Finish Module Schematic
 
-![Finish Module Circuit](images/finish_circuit_schematic.png)
+![Finish Module Circuit](images/final_circuit_schematic_box2.png)
 
 ### 🟢 Start Module Schematic (with LCD)
 
-![Start Module Circuit](images/start_circuit_schematic.png)
+![Start Module Circuit](images/final_circuit_schematic_box1.png)
 
 ---
 
